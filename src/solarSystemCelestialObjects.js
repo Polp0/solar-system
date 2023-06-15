@@ -43,7 +43,7 @@ const moon = {
         y: 0
     },
     satellites: [],
-    rotationSpeed: 27.32 // Approximately 27.32 times faster than Earth
+    rotationSpeed: 13.51
 };
 
 const earth = {
