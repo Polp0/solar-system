@@ -249,23 +249,5 @@ sun.satellites = [
 ];
 
 export {
-    sun,
-    mercury,
-    venus,
-    earth,
-    moon,
-    mars,
-    jupiter,
-    moonIo,
-    moonEuropa,
-    moonGanymede,
-    moonCallisto,
-    saturn,
-    moonTitan,
-    uranus,
-    moonTitania,
-    neptune,
-    moonTriton,
-    pluto,
-    moonCharon
+    sun
 };

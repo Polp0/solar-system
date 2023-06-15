@@ -2,25 +2,27 @@ let currentRotation = 0;
 
 class CelestialObject {
     p = undefined;
-    name = '';
-    size = 0;
-    radius = 0;
-    rotationRadius = 0;
+    name = undefined;
+    size = undefined;
+    radius = undefined;
+    rotationRadius = undefined;
     center= undefined
     parentCenter = undefined
     coordinates = undefined
+    currentParentCoordinates = undefined
     color = undefined;
-    satellites = []
+    satellites = undefined
     rotationSpeed = undefined;
+    parentRotationRadius = undefined
     parentRotationSpeed = undefined;
-    zoom = 40
+    zoom = 50
     scatter = 40
-    speedModifier = 1
+    speedModifier = 2
 
-    constructor(p, size, name, center, color, satellites, rotationSpeed, parentCenter, parentRotationSpeed) {
+    constructor(p, size, name, center, color, satellites, rotationSpeed, parentCenter, parentRotationSpeed, parentColor) {
         this.p = p;
         this.size = size * this.zoom;
-        this.radius = this.size / 2;
+        this.radius = size * this.zoom / 2;
         this.name = name;
         this.center = {
             x: center.x * this.scatter,
@@ -34,11 +36,12 @@ class CelestialObject {
             x: center.x * this.scatter,
             y: center.y * this.scatter
         }
-        this.rotationRadius = center.x * this.scatter / 2
         this.color = this.p.color(color);
         this.satellites = satellites;
         this.rotationSpeed = rotationSpeed;
         this.parentRotationSpeed = parentRotationSpeed;
+        this.rotationRadius = center.x * this.scatter - parentCenter.x;
+        this.parentRotationRadius = parentCenter.x
     }
 
     draw() {
@@ -57,7 +60,8 @@ class CelestialObject {
                     satellite.satellites,
                     satellite.rotationSpeed,
                     this.center,
-                    this.rotationSpeed
+                    this.rotationSpeed,
+                    this.color
                 )
 
                 celestialObject.draw();
@@ -78,16 +82,14 @@ class CelestialObject {
     updateCoordinates() {
             const angleInRadians = (currentRotation * this.rotationSpeed * Math.PI) / 360;
             const parentAngleInRadians = (currentRotation * this.parentRotationSpeed * Math.PI) / 360;
-            const rotationRadius = this.center.x - this.parentCenter.x;
-            const parentRotationRadius = this.parentCenter.x;
             
-            const currentParentCoordinates = {
-                x: parentRotationRadius * Math.cos(parentAngleInRadians),
-                y: parentRotationRadius * Math.sin(parentAngleInRadians)
+            this.currentParentCoordinates = {
+                x: this.parentRotationRadius * Math.cos(parentAngleInRadians),
+                y: this.parentRotationRadius * Math.sin(parentAngleInRadians)
             }
             
-            this.coordinates.x = currentParentCoordinates.x + rotationRadius * Math.cos(angleInRadians);
-            this.coordinates.y = currentParentCoordinates.y + rotationRadius * Math.sin(angleInRadians);
+            this.coordinates.x = this.currentParentCoordinates.x + this.rotationRadius * Math.cos(angleInRadians);
+            this.coordinates.y = this.currentParentCoordinates.y + this.rotationRadius * Math.sin(angleInRadians);
     }
 }
 
